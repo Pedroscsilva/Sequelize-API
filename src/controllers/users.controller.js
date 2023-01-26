@@ -9,6 +9,16 @@ const insertNewUser = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await usersService.getUsers();
+    return res.status(200).json(users);
+  } catch (error) {
+    return res.status(500).json({ message: 'something went wrong' });
+  }
+};
+
 module.exports = {
   insertNewUser,
+  getAllUsers,
 };
