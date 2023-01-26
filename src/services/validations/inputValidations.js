@@ -1,5 +1,5 @@
 const { User } = require('../../models');
-const { userSchema } = require('./schemas');
+const { userSchema, categorySchema } = require('./schemas');
 
 const checkCamps = async (userObject) => {
   const { error } = userSchema.validate(userObject);
@@ -17,6 +17,16 @@ const checkCamps = async (userObject) => {
   }
 };
 
+const checkCategory = (categoryObj) => {
+  const { error } = categorySchema.validate(categoryObj);
+  if (error) {
+    const newError = new Error(error.message);
+    newError.status = 400;
+    throw newError;
+  }
+};
+
 module.exports = {
   checkCamps,
+  checkCategory,
 };
