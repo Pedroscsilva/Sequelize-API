@@ -9,7 +9,7 @@ const insertNewUser = async (req, res) => {
   }
 };
 
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (_req, res) => {
   try {
     const users = await usersService.getUsers();
     return res.status(200).json(users);
@@ -18,7 +18,18 @@ const getAllUsers = async (req, res) => {
   }
 };
 
+const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await usersService.getUserById(id);
+    return res.status(200).json(user);
+  } catch (error) {
+    return res.status(error.status).json({ message: error.message });
+  }
+};
+
 module.exports = {
   insertNewUser,
   getAllUsers,
+  getUserById,
 };
