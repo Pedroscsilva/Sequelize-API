@@ -45,8 +45,17 @@ const checkPost = async ({ title, content, categoryIds }) => {
   }
 };
 
+const checkUpdatedPost = ({ title, content }) => {
+  if (!title || !content) {
+    const error = new Error('Some required fields are missing');
+    error.status = 400;
+    throw error;
+  }
+};
+
 module.exports = {
   checkCamps,
   checkCategory,
   checkPost,
+  checkUpdatedPost,
 };

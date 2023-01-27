@@ -10,6 +10,17 @@ const createPost = async (req, res) => {
   }
 };
 
+const updatePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const token = req.headers.authorization;
+    const updatedPost = await postsService.updatePost(req.body, id, token);
+    return res.status(200).json(updatedPost);
+  } catch (error) {
+    return res.status(error.status).json({ message: error.message });
+  }
+};
+
 const getAllPosts = async (_req, res) => {
   try {
     const allPosts = await postsService.getAllPosts();
@@ -31,6 +42,7 @@ const getPostById = async (req, res) => {
 
 module.exports = {
   createPost,
+  updatePost,
   getAllPosts,
   getPostById,
 };

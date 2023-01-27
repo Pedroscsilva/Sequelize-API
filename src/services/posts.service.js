@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const { BlogPost, PostCategory, Category, User } = require('../models');
 const { decodeToken } = require('../utils/JWT');
-const { checkPost } = require('./validations/inputValidations');
+const { checkPost, checkUpdatedPost } = require('./validations/inputValidations');
 
 const config = require('../config/config');
 
@@ -34,6 +34,31 @@ const createPost = async (postObject, token) => {
   }
 };
 
+const updatePost = async (postObject, postId, token) => {
+  checkUpdatedPost(postObject);
+
+  const { id } = decodeToken(token);
+
+  await BlogPost.update(postObject, {
+    where: { id: postId },
+  });
+
+  const post = await BlogPost.findByPk(postId, {
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+
+  if (post.userId !== id) {
+    const error = new Error('Unauthorized user');
+    error.status = 401;
+    throw error;
+  }
+
+  return post;
+};
+
 const getAllPosts = () => BlogPost.findAll({
     include: [
       { model: User, as: 'user', attributes: { exclude: ['password'] } },
@@ -60,6 +85,7 @@ const getPostById = async (id) => {
   
 module.exports = {
   createPost,
+  updatePost,
   getAllPosts,
   getPostById,
 };
