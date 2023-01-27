@@ -8,6 +8,8 @@ const config = require('../config/config');
 const env = process.env.NODE_ENV || 'development';
 const sequelize = new Sequelize(config[env]);
 
+const { Op } = Sequelize;
+
 const createPost = async (postObject, token) => {
   await checkPost(postObject);
   const { id } = decodeToken(token);
@@ -106,6 +108,24 @@ const getPostById = async (id) => {
 
   return post;
 }; 
+
+const getPostByQuery = async (query) => {
+  const modifiedQuery = `%${query}%`;
+  console.log(modifiedQuery);
+  const posts = await BlogPost.findAll({
+    where: { 
+      [Op.or]: [
+        { title: { [Op.like]: modifiedQuery } },
+        { content: { [Op.like]: modifiedQuery } },
+      ], 
+    },
+    include: [
+      { model: User, as: 'user', attributes: { exclude: ['password'] } },
+      { model: Category, as: 'categories', through: { attributes: [] } },
+    ],
+  });
+  return posts;
+};
   
 module.exports = {
   createPost,
@@ -113,4 +133,5 @@ module.exports = {
   getAllPosts,
   getPostById,
   deletePost,
+  getPostByQuery,
 };

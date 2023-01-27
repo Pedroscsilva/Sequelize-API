@@ -51,10 +51,22 @@ const getPostById = async (req, res) => {
   }
 };
 
+const getPostByQuery = async (req, res) => {
+  try {
+    const { q } = req.query;
+    const post = await postsService.getPostByQuery(q);
+    return res.status(200).json(post);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'something went wrong' });
+  }
+};
+
 module.exports = {
   createPost,
   updatePost,
   deletePost,
   getAllPosts,
   getPostById,
+  getPostByQuery,
 };
