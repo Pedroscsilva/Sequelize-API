@@ -28,8 +28,20 @@ const getUserById = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    await usersService.deleteUser(token);
+    return res.status(204).json();
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: 'something went wrong' });
+  }
+};
+
 module.exports = {
   insertNewUser,
   getAllUsers,
   getUserById,
+  deleteUser,
 };

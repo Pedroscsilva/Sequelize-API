@@ -25,8 +25,7 @@ const deletePost = async (req, res) => {
   try {
     const { id } = req.params;
     const token = req.headers.authorization;
-    const noSense = await postsService.deletePost(id, token);
-    console.log(noSense);
+    await postsService.deletePost(id, token);
     return res.status(204).json();
   } catch (error) {
     return res.status(error.status).json({ message: error.message });

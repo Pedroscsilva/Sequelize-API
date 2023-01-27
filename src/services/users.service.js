@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const { generateToken } = require('../utils/JWT');
+const { generateToken, decodeToken } = require('../utils/JWT');
 const { checkCamps } = require('./validations/inputValidations');
 
 const createUser = async (userObject) => {
@@ -34,8 +34,17 @@ const getUserById = async (id) => {
   return user;
 }; 
 
+const deleteUser = async (token) => {
+  const { id } = decodeToken(token);
+  const destroy = await User.destroy({
+    where: { id },
+  });
+  return destroy;
+};
+
 module.exports = {
   createUser,
   getUsers,
   getUserById,
+  deleteUser,
 };

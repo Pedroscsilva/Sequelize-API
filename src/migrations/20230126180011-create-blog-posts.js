@@ -17,6 +17,7 @@ module.exports = {
           key: 'id'
         },
         type: Sequelize.INTEGER,
+        onDelete: 'CASCADE',
       },
       published: Sequelize.DATE,
       updated: Sequelize.DATE,

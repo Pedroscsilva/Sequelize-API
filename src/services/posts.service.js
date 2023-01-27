@@ -76,11 +76,11 @@ const deletePost = async (postId, token) => {
     throw error;
   }
 
-  const noSense = await BlogPost.destroy({
+  const destroy = await BlogPost.destroy({
     where: { id: postId },
   });
 
-  return noSense;
+  return destroy;
 };
 
 const getAllPosts = () => BlogPost.findAll({
