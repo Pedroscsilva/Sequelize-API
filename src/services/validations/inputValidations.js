@@ -1,4 +1,4 @@
-const { User } = require('../../models');
+const { User, Category } = require('../../models');
 const { userSchema, categorySchema } = require('./schemas');
 
 const checkCamps = async (userObject) => {
@@ -26,7 +26,27 @@ const checkCategory = (categoryObj) => {
   }
 };
 
+const checkPost = async ({ title, content, categoryIds }) => {
+  if (!title || !content || !categoryIds) {
+    const error = new Error('Some required fields are missing');
+    error.status = 400;
+    throw error;
+  }
+
+  const categoriesArray = await Category.findAll();
+  const availableCategories = categoriesArray.map((category) => category.id);
+
+  const areCategoriesExistent = categoryIds.every((id) => availableCategories.includes(id));
+
+  if (!areCategoriesExistent) {
+    const error = new Error('one or more "categoryIds" not found');
+    error.status = 400;
+    throw error;
+  }
+};
+
 module.exports = {
   checkCamps,
   checkCategory,
+  checkPost,
 };

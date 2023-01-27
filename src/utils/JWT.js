@@ -25,7 +25,13 @@ const authenticateToken = (token) => {
   }
 };
 
+const decodeToken = (token) => {
+  const payload = jwt.decode(token);
+  return payload;
+};
+
 module.exports = {
   generateToken,
   authenticateToken,
+  decodeToken,
 };
