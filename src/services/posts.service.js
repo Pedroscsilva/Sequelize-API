@@ -59,6 +59,30 @@ const updatePost = async (postObject, postId, token) => {
   return post;
 };
 
+const deletePost = async (postId, token) => {
+  const post = await BlogPost.findByPk(postId);
+
+  if (!post) {
+    const error = new Error('Post does not exist');
+    error.status = 404;
+    throw error;
+  }
+
+  const { id } = decodeToken(token);
+
+  if (post.dataValues.userId !== id) {
+    const error = new Error('Unauthorized user');
+    error.status = 401;
+    throw error;
+  }
+
+  const noSense = await BlogPost.destroy({
+    where: { id: postId },
+  });
+
+  return noSense;
+};
+
 const getAllPosts = () => BlogPost.findAll({
     include: [
       { model: User, as: 'user', attributes: { exclude: ['password'] } },
@@ -88,4 +112,5 @@ module.exports = {
   updatePost,
   getAllPosts,
   getPostById,
+  deletePost,
 };

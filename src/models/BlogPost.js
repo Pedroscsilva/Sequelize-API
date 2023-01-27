@@ -10,7 +10,8 @@ const BlogPostsSchema = (sequelize, DataTypes) => {
    tableName: 'blog_posts',
    underscored: true,
    createdAt: "published",
-   updatedAt: "updated"
+   updatedAt: "updated",
+   onDelete: 'CASCADE',
   });
 
   BlogPostTable.associate = (models) => {

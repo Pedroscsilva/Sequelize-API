@@ -21,6 +21,18 @@ const updatePost = async (req, res) => {
   }
 };
 
+const deletePost = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const token = req.headers.authorization;
+    const noSense = await postsService.deletePost(id, token);
+    console.log(noSense);
+    return res.status(204).json();
+  } catch (error) {
+    return res.status(error.status).json({ message: error.message });
+  }
+};
+
 const getAllPosts = async (_req, res) => {
   try {
     const allPosts = await postsService.getAllPosts();
@@ -43,6 +55,7 @@ const getPostById = async (req, res) => {
 module.exports = {
   createPost,
   updatePost,
+  deletePost,
   getAllPosts,
   getPostById,
 };

@@ -20,6 +20,8 @@ module.exports = {
       },
       published: Sequelize.DATE,
       updated: Sequelize.DATE,
+    }, {
+      onDelete: 'CASCADE',
     });
   },
 
